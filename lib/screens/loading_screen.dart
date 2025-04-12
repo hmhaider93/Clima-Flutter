@@ -40,7 +40,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
     await myLocation.getCurrentLocation();
     double lat = myLocation.getLatitude();
     double lon = myLocation.getLongitude();
-    String appId = '7cc836c5d71614301b98f20199f34eb6';
+    String appId = '';
     // Response response = await get(Uri.parse('https://api.openweathermap.org/data/3.0/onecall?lat=$lat&lon=$lon&appid=$appId'));
     Response response = await get(Uri.parse('https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&appid=$appId'));
 
