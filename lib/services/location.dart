@@ -9,7 +9,7 @@ class Location {
     return 'Location(latitude: $_latitude, longitude: $_longitude)';
   }
 
-  void getCurrentLocation() async {
+  Future<void> getCurrentLocation() async {
     try {
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.low);

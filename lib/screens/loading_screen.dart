@@ -1,6 +1,8 @@
+import 'dart:convert';
+
 import 'package:clima/services/location.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart';
 
 class LoadingScreen extends StatefulWidget {
   @override
@@ -12,7 +14,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
   Location myLocation = Location();
   @override
   void initState() {
-    myLocation.getCurrentLocation();
+    super.initState();
+    getWeatherData();
   }
 
   String currentPostion = 'Get Location';
@@ -31,6 +34,28 @@ class _LoadingScreenState extends State<LoadingScreen> {
         ),
       ),
     );
+  }
+
+  void getWeatherData() async {
+    await myLocation.getCurrentLocation();
+    double lat = myLocation.getLatitude();
+    double lon = myLocation.getLongitude();
+    String appId = '7cc836c5d71614301b98f20199f34eb6';
+    // Response response = await get(Uri.parse('https://api.openweathermap.org/data/3.0/onecall?lat=$lat&lon=$lon&appid=$appId'));
+    Response response = await get(Uri.parse('https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&appid=$appId'));
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      var weather = data['weather'][0]['main'];
+      var condition = data['weather'][0]['id'];
+      var temperature = data['main']['temp'];
+      var city = data['name'];
+      print('Weather: $weather, Condition: $condition, Temperature: $temperature, City: $city');
+    } else {
+      print('Failed to load weather data');
+    }
+    print(response.statusCode);
+    
   }
 
   /// Determine the current position of the device.
